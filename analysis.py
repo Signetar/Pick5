@@ -40,6 +40,13 @@ class Analyser:
         
         if plot:
             games, z_values = zip(*z_scores)
+            
+            # Perform linear regression for the line of best fit
+            games_array = np.array(games).reshape(-1, 1)
+            z_values_array = np.array(z_values).reshape(-1, 1)
+            reg = LinearRegression().fit(games_array, z_values_array)
+            best_fit_line = reg.predict(games_array)
+            
             plt.figure(figsize=(10, 6))
             plt.plot(
                 games,
@@ -47,7 +54,14 @@ class Analyser:
                 label="Z-Scores",
                 alpha=0.7,
                 linestyle='-',
-                marker='o',  
+                marker='o',  # Add points as dots
+            )
+            plt.plot(
+                games,
+                best_fit_line.flatten(),
+                label="Line of Best Fit",
+                color="blue",
+                linestyle="--",
             )
             plt.axhline(0, color='gray', linestyle='-', label="Mean (Z=0)")
             plt.axhline(2, color='red', linestyle='--', label="Z=+2 Threshold")
@@ -58,5 +72,5 @@ class Analyser:
             plt.legend()
             plt.grid(axis='y', linestyle='--', alpha=0.7)
             plt.show()
-        
         return z_scores
+
