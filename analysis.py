@@ -21,20 +21,6 @@ class Analyser:
             raise ValueError(f"index {game_index} is out of range !!!!!!")
         return self.scores.iloc[game_index].dropna().values
 
-    def calculate_statistics(self, start_index=0, end_index=None):
-        if end_index is None:
-            end_index = len(self.scores)
-
-        game_averages = []
-        game_stdevs = []
-
-        for i in range(start_index, end_index):
-            game_results = self.game_result(i)
-            game_averages.append(game_results.mean())
-            game_stdevs.append(game_results.std())
-
-        return np.array(game_averages), np.array(game_stdevs)
-
     def player_zscore_analysis(self, name, plot=False):
         if name not in self.players:
             raise ValueError(f"'{name}' not in the sheets")
